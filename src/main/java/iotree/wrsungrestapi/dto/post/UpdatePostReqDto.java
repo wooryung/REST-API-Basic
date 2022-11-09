@@ -1,4 +1,4 @@
-package iotree.wrsungrestapi.dto;
+package iotree.wrsungrestapi.dto.post;
 
 import lombok.Data;
 

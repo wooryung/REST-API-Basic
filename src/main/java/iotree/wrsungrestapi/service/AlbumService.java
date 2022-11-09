@@ -1,53 +1,53 @@
 package iotree.wrsungrestapi.service;
 
 import iotree.wrsungrestapi.exception.NoSuchDataException;
-import iotree.wrsungrestapi.mapper.PostMapper;
-import iotree.wrsungrestapi.vo.PostVo;
+import iotree.wrsungrestapi.mapper.AlbumMapper;
+import iotree.wrsungrestapi.vo.AlbumVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PostService {
+public class AlbumService {
     @Autowired
-    private PostMapper postMapper;
+    private AlbumMapper albumMapper;
 
-    public List<PostVo> getPostList() {
-        List<PostVo> list = postMapper.getPostList();
+    public List<AlbumVo> getAlbumList() {
+        List<AlbumVo> list = albumMapper.getAlbumList();
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public List<PostVo> getPostListByUserId(Long userId) {
-        List<PostVo> list = postMapper.getPostListByUserId(userId);
+    public List<AlbumVo> getAlbumListByUserId(Long userId) {
+        List<AlbumVo> list = albumMapper.getAlbumListByUserId(userId);
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public PostVo getPostById(Long id) {
-        PostVo postVo = postMapper.getPostById(id);
-        if (postVo == null)
+    public AlbumVo getAlbumById(Long id) {
+        AlbumVo albumVo = albumMapper.getAlbumById(id);
+        if (albumVo == null)
             throw new NoSuchDataException("No such data exists.");
-        return postVo;
+        return albumVo;
     }
 
-    public void createPost(PostVo postVo) {
-        int result = postMapper.insertPost(postVo);
+    public void createAlbum(AlbumVo albumVo) {
+        int result = albumMapper.insertAlbum(albumVo);
         if (result != 1)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void updatePost(PostVo postVo) {
-        int result = postMapper.updatePost(postVo);
+    public void updateAlbum(AlbumVo albumVo) {
+        int result = albumMapper.updateAlbum(albumVo);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void deletePost(Long id) {
-        int result = postMapper.deletePost(id);
+    public void deleteAlbum(Long id) {
+        int result = albumMapper.deleteAlbum(id);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }

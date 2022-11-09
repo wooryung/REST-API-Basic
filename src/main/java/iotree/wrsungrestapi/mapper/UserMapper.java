@@ -1,0 +1,15 @@
+package iotree.wrsungrestapi.mapper;
+
+import iotree.wrsungrestapi.vo.UserVo;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface UserMapper {
+    List<UserVo> getUserList();
+    UserVo getUserById(Long id);
+    int insertUser(UserVo userVo);
+    int updateUser(UserVo userVo);
+    int deleteUser(Long id);
+}

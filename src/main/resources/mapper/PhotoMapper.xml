@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="iotree.wrsungrestapi.mapper.PhotoMapper">
+    <!-- Photo 테이블 가져오기 -->
+    <select id="getPhotoList" resultType="iotree.wrsungrestapi.vo.PhotoVo">
+        SELECT *
+        FROM Photo
+    </select>
+
+    <!-- albumId로 Photo 데이터 가져오기 -->
+    <select id="getPhotoListByAlbumId" resultType="iotree.wrsungrestapi.vo.PhotoVo">
+        SELECT *
+        FROM Photo
+        WHERE albumId = #{albumId}
+    </select>
+
+    <!-- id로 Photo 데이터 가져오기 -->
+    <select id="getPhotoById" resultType="iotree.wrsungrestapi.vo.PhotoVo">
+        SELECT *
+        FROM Photo
+        WHERE id = #{id}
+    </select>
+
+    <!-- Photo 데이터 추가하기 -->
+    <insert id="insertPhoto" parameterType="iotree.wrsungrestapi.vo.PhotoVo">
+        INSERT INTO Photo
+        (albumId, title, url, thumbnailUrl)
+        VALUES
+        (#{albumId}, #{title}, #{url}, #{thumbnailUrl})
+    </insert>
+
+    <!-- id로 Photo 데이터 수정하기 -->
+    <update id="updatePhoto" parameterType="iotree.wrsungrestapi.vo.PhotoVo">
+        UPDATE Photo
+        SET title = #{title},
+        url = #{url},
+        thumbnailUrl = #{thumbnailUrl}
+        WHERE id = #{id}
+    </update>
+
+    <!-- id로 Post 데이터 삭제하기 -->
+    <delete id="deletePhoto">
+        DELETE
+        FROM Photo
+        WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,12 +1,12 @@
 package iotree.wrsungrestapi.vo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PostVo {
+public class AlbumVo {
     private Long id;
     private Long userId;
     private String title;
-    private String body;
 }

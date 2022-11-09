@@ -1,53 +1,53 @@
 package iotree.wrsungrestapi.service;
 
 import iotree.wrsungrestapi.exception.NoSuchDataException;
-import iotree.wrsungrestapi.mapper.PostMapper;
-import iotree.wrsungrestapi.vo.PostVo;
+import iotree.wrsungrestapi.mapper.TodoMapper;
+import iotree.wrsungrestapi.vo.TodoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PostService {
+public class TodoService {
     @Autowired
-    private PostMapper postMapper;
+    private TodoMapper todoMapper;
 
-    public List<PostVo> getPostList() {
-        List<PostVo> list = postMapper.getPostList();
+    public List<TodoVo> getTodoList() {
+        List<TodoVo> list = todoMapper.getTodoList();
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public List<PostVo> getPostListByUserId(Long userId) {
-        List<PostVo> list = postMapper.getPostListByUserId(userId);
+    public List<TodoVo> getTodoListByUserId(Long userId) {
+        List<TodoVo> list = todoMapper.getTodoListByUserId(userId);
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public PostVo getPostById(Long id) {
-        PostVo postVo = postMapper.getPostById(id);
-        if (postVo == null)
+    public TodoVo getTodoById(Long id) {
+        TodoVo todoVo = todoMapper.getTodoById(id);
+        if (todoVo == null)
             throw new NoSuchDataException("No such data exists.");
-        return postVo;
+        return todoVo;
     }
 
-    public void createPost(PostVo postVo) {
-        int result = postMapper.insertPost(postVo);
+    public void createTodo(TodoVo todoVo) {
+        int result = todoMapper.insertTodo(todoVo);
         if (result != 1)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void updatePost(PostVo postVo) {
-        int result = postMapper.updatePost(postVo);
+    public void updateTodo(TodoVo todoVo) {
+        int result = todoMapper.updateTodo(todoVo);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void deletePost(Long id) {
-        int result = postMapper.deletePost(id);
+    public void deleteTodo(Long id) {
+        int result = todoMapper.deleteTodo(id);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }

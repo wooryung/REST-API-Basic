@@ -1,53 +1,53 @@
 package iotree.wrsungrestapi.service;
 
 import iotree.wrsungrestapi.exception.NoSuchDataException;
-import iotree.wrsungrestapi.mapper.PostMapper;
-import iotree.wrsungrestapi.vo.PostVo;
+import iotree.wrsungrestapi.mapper.PhotoMapper;
+import iotree.wrsungrestapi.vo.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PostService {
+public class PhotoService {
     @Autowired
-    private PostMapper postMapper;
+    private PhotoMapper photoMapper;
 
-    public List<PostVo> getPostList() {
-        List<PostVo> list = postMapper.getPostList();
+    public List<PhotoVo> getPhotoList() {
+        List<PhotoVo> list = photoMapper.getPhotoList();
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public List<PostVo> getPostListByUserId(Long userId) {
-        List<PostVo> list = postMapper.getPostListByUserId(userId);
+    public List<PhotoVo> getPhotoListByAlbumId(Long albumId) {
+        List<PhotoVo> list = photoMapper.getPhotoListByAlbumId(albumId);
         if (list.isEmpty())
             throw new NoSuchDataException("No such data exists.");
         return list;
     }
 
-    public PostVo getPostById(Long id) {
-        PostVo postVo = postMapper.getPostById(id);
-        if (postVo == null)
+    public PhotoVo getPhotoById(Long id) {
+        PhotoVo photoVo = photoMapper.getPhotoById(id);
+        if (photoVo == null)
             throw new NoSuchDataException("No such data exists.");
-        return postVo;
+        return photoVo;
     }
 
-    public void createPost(PostVo postVo) {
-        int result = postMapper.insertPost(postVo);
+    public void createPhoto(PhotoVo photoVo) {
+        int result = photoMapper.insertPhoto(photoVo);
         if (result != 1)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void updatePost(PostVo postVo) {
-        int result = postMapper.updatePost(postVo);
+    public void updatePhoto(PhotoVo photoVo) {
+        int result = photoMapper.updatePhoto(photoVo);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }
 
-    public void deletePost(Long id) {
-        int result = postMapper.deletePost(id);
+    public void deletePhoto(Long id) {
+        int result = photoMapper.deletePhoto(id);
         if (result == 0)
             throw new NoSuchDataException("No such data exists.");
     }

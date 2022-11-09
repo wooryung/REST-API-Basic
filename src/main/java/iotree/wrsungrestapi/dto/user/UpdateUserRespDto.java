@@ -1,10 +1,10 @@
-package iotree.wrsungrestapi.dto;
+package iotree.wrsungrestapi.dto.user;
 
 import iotree.wrsungrestapi.consts.ResCode;
 import lombok.Data;
 
 @Data
-public class UpdatePostRespDto {
+public class UpdateUserRespDto {
     private int code = ResCode.SUCCESS.value();
-    private String message = null;
+    private String message;
 }
