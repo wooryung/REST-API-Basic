@@ -28,9 +28,7 @@ public class UserService {
     }
 
     public void createUser(UserVo userVo) {
-        int result = userMapper.insertUser(userVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        userMapper.insertUser(userVo);
     }
 
     public void updateUser(UserVo userVo) {

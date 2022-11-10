@@ -35,9 +35,7 @@ public class CommentService {
     }
 
     public void createComment(CommentVo commentVo) {
-        int result = commentMapper.insertComment(commentVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        commentMapper.insertComment(commentVo);
     }
 
     public void updateComment(CommentVo commentVo) {

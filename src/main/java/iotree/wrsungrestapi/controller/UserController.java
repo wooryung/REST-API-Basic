@@ -7,6 +7,8 @@ import iotree.wrsungrestapi.service.UserService;
 import iotree.wrsungrestapi.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -24,7 +26,7 @@ public class UserController {
             getUserListRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getUserListRespDto.setMessage("No such user exists.");
         } catch (Exception e) {
-            log.error("[UserController getUserList] " + e);
+            log.error("[UserController getUserList]", e);
             getUserListRespDto.setCode(ResCode.UNKNOWN.value());
             getUserListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -35,12 +37,12 @@ public class UserController {
     public GetUserRespDto getUser(@PathVariable Long id) {
         GetUserRespDto getUserRespDto = new GetUserRespDto();
         try {
-            getUserRespDto.setUserVo(userService.getUserById(id));
+            getUserRespDto.setUser(userService.getUserById(id));
         } catch (NoSuchDataException e) {
             getUserRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getUserRespDto.setMessage("No such user exists.");
         } catch (Exception e) {
-            log.error("[UserController getUser] " + e);
+            log.error("[UserController getUser]", e);
             getUserRespDto.setCode(ResCode.UNKNOWN.value());
             getUserRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -48,20 +50,23 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public InsertUserRespDto createUser(@RequestBody InsertUserReqDto insertUserReqDto) {
-        InsertUserRespDto insertUserRespDto = new InsertUserRespDto();
+    public CreateUserRespDto createUser(@RequestBody CreateUserReqDto createUserReqDto) {
+        CreateUserRespDto createUserRespDto = new CreateUserRespDto();
         try {
-            UserVo userVo = new UserVo(0L, insertUserReqDto.getName(), insertUserReqDto.getUsername(), insertUserReqDto.getEmail(), insertUserReqDto.getPassword(), insertUserReqDto.getAddress(), insertUserReqDto.getPhone(), insertUserReqDto.getWebsite(), insertUserReqDto.getCompany());
+            UserVo userVo = new UserVo(0L, createUserReqDto.getName(), createUserReqDto.getUsername(), createUserReqDto.getEmail(), createUserReqDto.getPassword(), createUserReqDto.getAddress(), createUserReqDto.getPhone(), createUserReqDto.getWebsite(), createUserReqDto.getCompany());
             userService.createUser(userVo);
-        } catch (NoSuchDataException e) {
-            insertUserRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertUserRespDto.setMessage("No such user created.");
+        } catch (DuplicateKeyException e) {
+            createUserRespDto.setCode(ResCode.DUPLICATE_KEY.value());
+            createUserRespDto.setMessage("Duplicate 'username' or 'email'.");
+        } catch (DataIntegrityViolationException e) {
+            createUserRespDto.setCode(ResCode.NULL_VALUE.value());
+            createUserRespDto.setMessage("'username', 'email' are required.");
         } catch (Exception e) {
-            log.error("[UserController createUser] " + e);
-            insertUserRespDto.setCode(ResCode.UNKNOWN.value());
-            insertUserRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[UserController createUser]", e);
+            createUserRespDto.setCode(ResCode.UNKNOWN.value());
+            createUserRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertUserRespDto;
+        return createUserRespDto;
     }
 
     @PutMapping("/users/{id}")
@@ -74,7 +79,7 @@ public class UserController {
             updateUserRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updateUserRespDto.setMessage("No such user exists.");
         } catch (Exception e) {
-            log.error("[UserController updateUser] " + e);
+            log.error("[UserController updateUser]", e);
             updateUserRespDto.setCode(ResCode.UNKNOWN.value());
             updateUserRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -90,7 +95,7 @@ public class UserController {
             deleteUserRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deleteUserRespDto.setMessage("No such user exists.");
         } catch (Exception e) {
-            log.error("[UserController deleteUser] " + e);
+            log.error("[UserController deleteUser]", e);
             deleteUserRespDto.setCode(ResCode.UNKNOWN.value());
             deleteUserRespDto.setMessage(e.getLocalizedMessage());
         }

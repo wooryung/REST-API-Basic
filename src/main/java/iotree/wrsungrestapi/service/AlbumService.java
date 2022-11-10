@@ -35,9 +35,7 @@ public class AlbumService {
     }
 
     public void createAlbum(AlbumVo albumVo) {
-        int result = albumMapper.insertAlbum(albumVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        albumMapper.insertAlbum(albumVo);
     }
 
     public void updateAlbum(AlbumVo albumVo) {

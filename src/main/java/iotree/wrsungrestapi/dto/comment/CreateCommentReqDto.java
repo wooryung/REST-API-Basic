@@ -3,7 +3,7 @@ package iotree.wrsungrestapi.dto.comment;
 import lombok.Data;
 
 @Data
-public class InsertCommentReqDto {
+public class CreateCommentReqDto {
     private Long postId;
     private String name;
     private String email;

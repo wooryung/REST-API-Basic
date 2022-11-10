@@ -7,6 +7,7 @@ import iotree.wrsungrestapi.service.CommentService;
 import iotree.wrsungrestapi.vo.CommentVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class CommentController {
             getCommentListRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getCommentListRespDto.setMessage("No such comment exists.");
         } catch (Exception e) {
-            log.error("[CommentController getCommentList] " + e);
+            log.error("[CommentController getCommentList]", e);
             getCommentListRespDto.setCode(ResCode.UNKNOWN.value());
             getCommentListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -38,12 +39,12 @@ public class CommentController {
     public GetCommentRespDto getComment(@PathVariable Long id) {
         GetCommentRespDto getCommentRespDto = new GetCommentRespDto();
         try {
-            getCommentRespDto.setCommentVo(commentService.getCommentById(id));
+            getCommentRespDto.setComment(commentService.getCommentById(id));
         } catch (NoSuchDataException e) {
             getCommentRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getCommentRespDto.setMessage("No such comment exists.");
         } catch (Exception e) {
-            log.error("[CommentController getComment] " + e);
+            log.error("[CommentController getComment]", e);
             getCommentRespDto.setCode(ResCode.UNKNOWN.value());
             getCommentRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -51,20 +52,20 @@ public class CommentController {
     }
 
     @PostMapping("/comments")
-    public InsertCommentRespDto createComment(@RequestBody InsertCommentReqDto insertCommentReqDto) {
-        InsertCommentRespDto insertCommentRespDto = new InsertCommentRespDto();
+    public CreateCommentRespDto createComment(@RequestBody CreateCommentReqDto createCommentReqDto) {
+        CreateCommentRespDto createCommentRespDto = new CreateCommentRespDto();
         try {
-            CommentVo commentVo = new CommentVo(0L, insertCommentReqDto.getPostId(), insertCommentReqDto.getName(), insertCommentReqDto.getEmail(), insertCommentReqDto.getBody());
+            CommentVo commentVo = new CommentVo(0L, createCommentReqDto.getPostId(), createCommentReqDto.getName(), createCommentReqDto.getEmail(), createCommentReqDto.getBody());
             commentService.createComment(commentVo);
-        } catch (NoSuchDataException e) {
-            insertCommentRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertCommentRespDto.setMessage("No such comment created.");
+        } catch (DataIntegrityViolationException e) {
+            createCommentRespDto.setCode(ResCode.NULL_VALUE.value());
+            createCommentRespDto.setMessage("'postId', 'name', 'email', 'body' are required.");
         } catch (Exception e) {
-            log.error("[CommentController createComment] " + e);
-            insertCommentRespDto.setCode(ResCode.UNKNOWN.value());
-            insertCommentRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[CommentController createComment]", e);
+            createCommentRespDto.setCode(ResCode.UNKNOWN.value());
+            createCommentRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertCommentRespDto;
+        return createCommentRespDto;
     }
 
     @PutMapping("/comments/{id}")
@@ -77,7 +78,7 @@ public class CommentController {
             updateCommentRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updateCommentRespDto.setMessage("No such comment exists.");
         } catch (Exception e) {
-            log.error("[CommentController updateComment] " + e);
+            log.error("[CommentController updateComment]", e);
             updateCommentRespDto.setCode(ResCode.UNKNOWN.value());
             updateCommentRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -93,7 +94,7 @@ public class CommentController {
             deleteCommentRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deleteCommentRespDto.setMessage("No such comment exists.");
         } catch (Exception e) {
-            log.error("[CommentController deleteComment] " + e);
+            log.error("[CommentController deleteComment]", e);
             deleteCommentRespDto.setCode(ResCode.UNKNOWN.value());
             deleteCommentRespDto.setMessage(e.getLocalizedMessage());
         }

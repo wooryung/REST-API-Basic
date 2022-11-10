@@ -10,7 +10,7 @@ public interface CommentMapper {
     List<CommentVo> getCommentList();
     List<CommentVo> getCommentListByPostId(Long postId);
     CommentVo getCommentById(Long id);
-    int insertComment(CommentVo commentVo);
+    void insertComment(CommentVo commentVo);
     int updateComment(CommentVo commentVo);
     int deleteComment(Long id);
 }

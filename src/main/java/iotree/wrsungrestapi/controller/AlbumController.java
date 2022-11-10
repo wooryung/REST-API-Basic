@@ -7,6 +7,7 @@ import iotree.wrsungrestapi.service.AlbumService;
 import iotree.wrsungrestapi.vo.AlbumVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class AlbumController {
             getAlbumListRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getAlbumListRespDto.setMessage("No such album exists.");
         } catch (Exception e) {
-            log.error("[AlbumController getAlbumList] " + e);
+            log.error("[AlbumController getAlbumList]", e);
             getAlbumListRespDto.setCode(ResCode.UNKNOWN.value());
             getAlbumListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -38,12 +39,12 @@ public class AlbumController {
     public GetAlbumRespDto getAlbum(@PathVariable Long id) {
         GetAlbumRespDto getAlbumRespDto = new GetAlbumRespDto();
         try {
-            getAlbumRespDto.setAlbumVo(albumService.getAlbumById(id));
+            getAlbumRespDto.setAlbum(albumService.getAlbumById(id));
         } catch (NoSuchDataException e) {
             getAlbumRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getAlbumRespDto.setMessage("No such album exists.");
         } catch (Exception e) {
-            log.error("[AlbumController getAlbum] " + e);
+            log.error("[AlbumController getAlbum]", e);
             getAlbumRespDto.setCode(ResCode.UNKNOWN.value());
             getAlbumRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -51,20 +52,20 @@ public class AlbumController {
     }
 
     @PostMapping("/albums")
-    public InsertAlbumRespDto createAlbum(@RequestBody InsertAlbumReqDto insertAlbumReqDto) {
-        InsertAlbumRespDto insertAlbumRespDto = new InsertAlbumRespDto();
+    public CreateAlbumRespDto createAlbum(@RequestBody CreateAlbumReqDto createAlbumReqDto) {
+        CreateAlbumRespDto createAlbumRespDto = new CreateAlbumRespDto();
         try {
-            AlbumVo albumVo = new AlbumVo(0L, insertAlbumReqDto.getUserId(), insertAlbumReqDto.getTitle());
+            AlbumVo albumVo = new AlbumVo(0L, createAlbumReqDto.getUserId(), createAlbumReqDto.getTitle());
             albumService.createAlbum(albumVo);
-        } catch (NoSuchDataException e) {
-            insertAlbumRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertAlbumRespDto.setMessage("No such album created.");
+        } catch (DataIntegrityViolationException e) {
+            createAlbumRespDto.setCode(ResCode.NULL_VALUE.value());
+            createAlbumRespDto.setMessage("'userId', 'title' are required.");
         } catch (Exception e) {
-            log.error("[AlbumController createAlbum] " + e);
-            insertAlbumRespDto.setCode(ResCode.UNKNOWN.value());
-            insertAlbumRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[AlbumController createAlbum]", e);
+            createAlbumRespDto.setCode(ResCode.UNKNOWN.value());
+            createAlbumRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertAlbumRespDto;
+        return createAlbumRespDto;
     }
 
     @PutMapping("/albums/{id}")
@@ -77,7 +78,7 @@ public class AlbumController {
             updateAlbumRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updateAlbumRespDto.setMessage("No such album exists.");
         } catch (Exception e) {
-            log.error("[AlbumController updateAlbum] " + e);
+            log.error("[AlbumController updateAlbum]", e);
             updateAlbumRespDto.setCode(ResCode.UNKNOWN.value());
             updateAlbumRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -93,7 +94,7 @@ public class AlbumController {
             deleteAlbumRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deleteAlbumRespDto.setMessage("No such album exists.");
         } catch (Exception e) {
-            log.error("[AlbumController deleteAlbum] " + e);
+            log.error("[AlbumController deleteAlbum]", e);
             deleteAlbumRespDto.setCode(ResCode.UNKNOWN.value());
             deleteAlbumRespDto.setMessage(e.getLocalizedMessage());
         }

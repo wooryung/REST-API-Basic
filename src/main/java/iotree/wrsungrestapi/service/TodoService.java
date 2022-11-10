@@ -35,9 +35,7 @@ public class TodoService {
     }
 
     public void createTodo(TodoVo todoVo) {
-        int result = todoMapper.insertTodo(todoVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        todoMapper.insertTodo(todoVo);
     }
 
     public void updateTodo(TodoVo todoVo) {

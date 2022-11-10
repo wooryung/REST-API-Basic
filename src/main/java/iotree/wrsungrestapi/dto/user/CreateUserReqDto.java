@@ -3,7 +3,7 @@ package iotree.wrsungrestapi.dto.user;
 import lombok.Data;
 
 @Data
-public class InsertUserReqDto {
+public class CreateUserReqDto {
     private String name;
     private String username;
     private String email;

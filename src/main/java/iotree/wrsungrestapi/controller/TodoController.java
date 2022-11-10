@@ -7,6 +7,7 @@ import iotree.wrsungrestapi.service.TodoService;
 import iotree.wrsungrestapi.vo.TodoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class TodoController {
             getTodoListRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getTodoListRespDto.setMessage("No such todo exists.");
         } catch (Exception e) {
-            log.error("[TodoController getTodoList] " + e);
+            log.error("[TodoController getTodoList]", e);
             getTodoListRespDto.setCode(ResCode.UNKNOWN.value());
             getTodoListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -38,12 +39,12 @@ public class TodoController {
     public GetTodoRespDto getTodo(@PathVariable Long id) {
         GetTodoRespDto getTodoRespDto = new GetTodoRespDto();
         try {
-            getTodoRespDto.setTodoVo(todoService.getTodoById(id));
+            getTodoRespDto.setTodo(todoService.getTodoById(id));
         } catch (NoSuchDataException e) {
             getTodoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getTodoRespDto.setMessage("No such todo exists.");
         } catch (Exception e) {
-            log.error("[TodoController getTodo] " + e);
+            log.error("[TodoController getTodo]", e);
             getTodoRespDto.setCode(ResCode.UNKNOWN.value());
             getTodoRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -51,20 +52,20 @@ public class TodoController {
     }
 
     @PostMapping("/todos")
-    public InsertTodoRespDto createTodo(@RequestBody InsertTodoReqDto insertTodoReqDto) {
-        InsertTodoRespDto insertTodoRespDto = new InsertTodoRespDto();
+    public CreateTodoRespDto createTodo(@RequestBody CreateTodoReqDto createTodoReqDto) {
+        CreateTodoRespDto createTodoRespDto = new CreateTodoRespDto();
         try {
-            TodoVo todoVo = new TodoVo(0L, insertTodoReqDto.getUserId(), insertTodoReqDto.getTitle(), insertTodoReqDto.getCompleted());
+            TodoVo todoVo = new TodoVo(0L, createTodoReqDto.getUserId(), createTodoReqDto.getTitle(), createTodoReqDto.getCompleted());
             todoService.createTodo(todoVo);
-        } catch (NoSuchDataException e) {
-            insertTodoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertTodoRespDto.setMessage("No such todo created.");
+        } catch (DataIntegrityViolationException e) {
+            createTodoRespDto.setCode(ResCode.NULL_VALUE.value());
+            createTodoRespDto.setMessage("'userId', 'title', 'completed' are required.");
         } catch (Exception e) {
-            log.error("[TodoController createTodo] " + e);
-            insertTodoRespDto.setCode(ResCode.UNKNOWN.value());
-            insertTodoRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[TodoController createTodo]", e);
+            createTodoRespDto.setCode(ResCode.UNKNOWN.value());
+            createTodoRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertTodoRespDto;
+        return createTodoRespDto;
     }
 
     @PutMapping("/todos/{id}")
@@ -77,7 +78,7 @@ public class TodoController {
             updateTodoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updateTodoRespDto.setMessage("No such todo exists.");
         } catch (Exception e) {
-            log.error("[TodoController updateTodo] " + e);
+            log.error("[TodoController updateTodo]", e);
             updateTodoRespDto.setCode(ResCode.UNKNOWN.value());
             updateTodoRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -93,7 +94,7 @@ public class TodoController {
             deleteTodoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deleteTodoRespDto.setMessage("No such todo exists.");
         } catch (Exception e) {
-            log.error("[TodoController deleteTodo] " + e);
+            log.error("[TodoController deleteTodo]", e);
             deleteTodoRespDto.setCode(ResCode.UNKNOWN.value());
             deleteTodoRespDto.setMessage(e.getLocalizedMessage());
         }

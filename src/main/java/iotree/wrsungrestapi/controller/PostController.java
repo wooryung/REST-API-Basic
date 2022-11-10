@@ -7,6 +7,7 @@ import iotree.wrsungrestapi.service.PostService;
 import iotree.wrsungrestapi.vo.PostVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class PostController {
             getPostListRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getPostListRespDto.setMessage("No such post exists.");
         } catch (Exception e) {
-            log.error("[PostController getPostList] " + e);
+            log.error("[PostController getPostList]", e);
             getPostListRespDto.setCode(ResCode.UNKNOWN.value());
             getPostListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -38,12 +39,12 @@ public class PostController {
     public GetPostRespDto getPost(@PathVariable Long id) {
         GetPostRespDto getPostRespDto = new GetPostRespDto();
         try {
-            getPostRespDto.setPostVo(postService.getPostById(id));
+            getPostRespDto.setPost(postService.getPostById(id));
         } catch (NoSuchDataException e) {
             getPostRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getPostRespDto.setMessage("No such post exists.");
         } catch (Exception e) {
-            log.error("[PostController getPost] " + e);
+            log.error("[PostController getPost]", e);
             getPostRespDto.setCode(ResCode.UNKNOWN.value());
             getPostRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -51,20 +52,20 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public InsertPostRespDto createPost(@RequestBody InsertPostReqDto insertPostReqDto) {
-        InsertPostRespDto insertPostRespDto = new InsertPostRespDto();
+    public CreatePostRespDto createPost(@RequestBody CreatePostReqDto createPostReqDto) {
+        CreatePostRespDto createPostRespDto = new CreatePostRespDto();
         try {
-            PostVo postVo = new PostVo(0L, insertPostReqDto.getUserId(), insertPostReqDto.getTitle(), insertPostReqDto.getBody());
+            PostVo postVo = new PostVo(0L, createPostReqDto.getUserId(), createPostReqDto.getTitle(), createPostReqDto.getBody());
             postService.createPost(postVo);
-        } catch (NoSuchDataException e) {
-            insertPostRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertPostRespDto.setMessage("No such post created.");
+        } catch (DataIntegrityViolationException e) {
+            createPostRespDto.setCode(ResCode.NULL_VALUE.value());
+            createPostRespDto.setMessage("'userId', 'title', 'body' are required.");
         } catch (Exception e) {
-            log.error("[PostController createPost] " + e);
-            insertPostRespDto.setCode(ResCode.UNKNOWN.value());
-            insertPostRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[PostController createPost]", e);
+            createPostRespDto.setCode(ResCode.UNKNOWN.value());
+            createPostRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertPostRespDto;
+        return createPostRespDto;
     }
 
     @PutMapping("/posts/{id}")
@@ -77,7 +78,7 @@ public class PostController {
             updatePostRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updatePostRespDto.setMessage("No such post exists.");
         } catch (Exception e) {
-            log.error("[PostController updatePost] " + e);
+            log.error("[PostController updatePost]", e);
             updatePostRespDto.setCode(ResCode.UNKNOWN.value());
             updatePostRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -93,7 +94,7 @@ public class PostController {
             deletePostRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deletePostRespDto.setMessage("No such post exists.");
         } catch (Exception e) {
-            log.error("[PostController deletePost] " + e);
+            log.error("[PostController deletePost]", e);
             deletePostRespDto.setCode(ResCode.UNKNOWN.value());
             deletePostRespDto.setMessage(e.getLocalizedMessage());
         }

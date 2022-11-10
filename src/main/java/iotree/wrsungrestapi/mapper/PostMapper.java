@@ -10,7 +10,7 @@ public interface PostMapper {
     List<PostVo> getPostList();
     List<PostVo> getPostListByUserId(Long userId);
     PostVo getPostById(Long id);
-    int insertPost(PostVo postVo);
+    void insertPost(PostVo postVo);
     int updatePost(PostVo postVo);
     int deletePost(Long id);
 }

@@ -35,9 +35,7 @@ public class PostService {
     }
 
     public void createPost(PostVo postVo) {
-        int result = postMapper.insertPost(postVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        postMapper.insertPost(postVo);
     }
 
     public void updatePost(PostVo postVo) {

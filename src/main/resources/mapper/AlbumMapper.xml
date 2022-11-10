@@ -22,7 +22,7 @@
     </select>
 
     <!-- Album 데이터 추가하기 -->
-    <insert id="insertAlbum" parameterType="iotree.wrsungrestapi.vo.AlbumVo">
+    <insert id="insertAlbum">
         INSERT INTO Album
             (userId, title)
         VALUES
@@ -30,7 +30,7 @@
     </insert>
 
     <!-- id로 Album 데이터 수정하기 -->
-    <update id="updateAlbum" parameterType="iotree.wrsungrestapi.vo.AlbumVo">
+    <update id="updateAlbum">
         UPDATE Album
         SET title = #{title}
         WHERE id = #{id}

@@ -1,10 +1,12 @@
 package iotree.wrsungrestapi.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import iotree.wrsungrestapi.consts.ResCode;
 import lombok.Data;
 
 @Data
-public class InsertUserRespDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CreateUserRespDto {
     private int code = ResCode.SUCCESS.value();
     private String message;
 }

@@ -3,7 +3,7 @@ package iotree.wrsungrestapi.dto.photo;
 import lombok.Data;
 
 @Data
-public class InsertPhotoReqDto {
+public class CreatePhotoReqDto {
     private Long albumId;
     private String title;
     private String url;

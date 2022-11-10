@@ -1,10 +1,12 @@
 package iotree.wrsungrestapi.dto.comment;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import iotree.wrsungrestapi.consts.ResCode;
 import lombok.Data;
 
 @Data
-public class InsertCommentRespDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CreateCommentRespDto {
     private int code = ResCode.SUCCESS.value();
     private String message;
 }

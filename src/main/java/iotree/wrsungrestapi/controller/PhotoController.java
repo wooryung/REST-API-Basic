@@ -7,6 +7,7 @@ import iotree.wrsungrestapi.service.PhotoService;
 import iotree.wrsungrestapi.vo.PhotoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class PhotoController {
             getPhotoListRespDto.setCode(ResCode.SUCCESS.value());
             getPhotoListRespDto.setMessage("No such photo exists.");
         } catch (Exception e) {
-            log.error("[PhotoController getPhotoList] " + e);
+            log.error("[PhotoController getPhotoList]", e);
             getPhotoListRespDto.setCode(ResCode.UNKNOWN.value());
             getPhotoListRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -38,12 +39,12 @@ public class PhotoController {
     public GetPhotoRespDto getPhoto(@PathVariable Long id) {
         GetPhotoRespDto getPhotoRespDto = new GetPhotoRespDto();
         try {
-            getPhotoRespDto.setPhotoVo(photoService.getPhotoById(id));
+            getPhotoRespDto.setPhoto(photoService.getPhotoById(id));
         } catch (NoSuchDataException e) {
             getPhotoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             getPhotoRespDto.setMessage("No such photo exists.");
         } catch (Exception e) {
-            log.error("[PhotoController getPhoto] " + e);
+            log.error("[PhotoController getPhoto]", e);
             getPhotoRespDto.setCode(ResCode.UNKNOWN.value());
             getPhotoRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -51,20 +52,20 @@ public class PhotoController {
     }
 
     @PostMapping("/photos")
-    public InsertPhotoRespDto createPhoto(@RequestBody InsertPhotoReqDto insertPhotoReqDto) {
-        InsertPhotoRespDto insertPhotoRespDto = new InsertPhotoRespDto();
+    public CreatePhotoRespDto createPhoto(@RequestBody CreatePhotoReqDto createPhotoReqDto) {
+        CreatePhotoRespDto createPhotoRespDto = new CreatePhotoRespDto();
         try {
-            PhotoVo photoVo = new PhotoVo(0L, insertPhotoReqDto.getAlbumId(), insertPhotoReqDto.getTitle(), insertPhotoReqDto.getUrl(), insertPhotoReqDto.getThumbnailUrl());
+            PhotoVo photoVo = new PhotoVo(0L, createPhotoReqDto.getAlbumId(), createPhotoReqDto.getTitle(), createPhotoReqDto.getUrl(), createPhotoReqDto.getThumbnailUrl());
             photoService.createPhoto(photoVo);
-        } catch (NoSuchDataException e) {
-            insertPhotoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
-            insertPhotoRespDto.setMessage("No such photo created.");
+        } catch (DataIntegrityViolationException e) {
+            createPhotoRespDto.setCode(ResCode.NULL_VALUE.value());
+            createPhotoRespDto.setMessage("'albumId', 'title', 'url', 'thumbnailUrl' are required.");
         } catch (Exception e) {
-            log.error("[PhotoController createPhoto] " + e);
-            insertPhotoRespDto.setCode(ResCode.UNKNOWN.value());
-            insertPhotoRespDto.setMessage(e.getLocalizedMessage());
+            log.error("[PhotoController createPhoto]", e);
+            createPhotoRespDto.setCode(ResCode.UNKNOWN.value());
+            createPhotoRespDto.setMessage(e.getLocalizedMessage());
         }
-        return insertPhotoRespDto;
+        return createPhotoRespDto;
     }
 
     @PutMapping("/photos/{id}")
@@ -77,7 +78,7 @@ public class PhotoController {
             updatePhotoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             updatePhotoRespDto.setMessage("No such photo exists.");
         } catch (Exception e) {
-            log.error("[PhotoController updatePhoto] " + e);
+            log.error("[PhotoController updatePhoto]", e);
             updatePhotoRespDto.setCode(ResCode.UNKNOWN.value());
             updatePhotoRespDto.setMessage(e.getLocalizedMessage());
         }
@@ -93,7 +94,7 @@ public class PhotoController {
             deletePhotoRespDto.setCode(ResCode.NO_SUCH_DATA.value());
             deletePhotoRespDto.setMessage("No such photo exists.");
         } catch (Exception e) {
-            log.error("[PhotoController deletePhoto] " + e);
+            log.error("[PhotoController deletePhoto]", e);
             deletePhotoRespDto.setCode(ResCode.UNKNOWN.value());
             deletePhotoRespDto.setMessage(e.getLocalizedMessage());
         }

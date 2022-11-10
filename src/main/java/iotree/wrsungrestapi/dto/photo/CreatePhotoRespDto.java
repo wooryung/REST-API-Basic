@@ -1,10 +1,12 @@
 package iotree.wrsungrestapi.dto.photo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import iotree.wrsungrestapi.consts.ResCode;
 import lombok.Data;
 
 @Data
-public class InsertPhotoRespDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CreatePhotoRespDto {
     private int code = ResCode.SUCCESS.value();
     private String message;
 }

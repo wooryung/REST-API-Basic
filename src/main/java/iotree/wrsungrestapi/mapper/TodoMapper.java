@@ -10,7 +10,7 @@ public interface TodoMapper {
     List<TodoVo> getTodoList();
     List<TodoVo> getTodoListByUserId(Long userId);
     TodoVo getTodoById(Long id);
-    int insertTodo(TodoVo todoVo);
+    void insertTodo(TodoVo todoVo);
     int updateTodo(TodoVo todoVo);
     int deleteTodo(Long id);
 }

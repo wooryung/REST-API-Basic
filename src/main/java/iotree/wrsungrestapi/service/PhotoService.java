@@ -35,9 +35,7 @@ public class PhotoService {
     }
 
     public void createPhoto(PhotoVo photoVo) {
-        int result = photoMapper.insertPhoto(photoVo);
-        if (result != 1)
-            throw new NoSuchDataException("No such data exists.");
+        photoMapper.insertPhoto(photoVo);
     }
 
     public void updatePhoto(PhotoVo photoVo) {
